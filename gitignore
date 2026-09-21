@@ -1,0 +1,30 @@
+# ---- OS files ----
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ---- Editors / IDEs ----
+.vscode/
+.idea/
+*.swp
+*~
+
+# ---- Dependencies (if you ever npm install anything) ----
+node_modules/
+.npm/
+
+# ---- Logs & temp ----
+*.log
+npm-debug.log*
+*.tmp
+.cache/
+
+# ---- Secrets: never commit these (keep for when the real WebSocket server needs keys) ----
+.env
+.env.*
+!.env.example
+*.pem
+
+# ---- Local Claude Code settings (per-machine; CLAUDE.md and AGENTS.md ARE committed) ----
+.claude/settings.local.json
+CLAUDE.local.md

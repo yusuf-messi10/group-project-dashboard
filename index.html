@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contribution Dashboard</title>
+
+  <meta name="description" content="Track project contributions, chat with your team, and find meeting times that work for everyone." />
+
+  <!-- PWA -->
+  <meta name="theme-color" content="#0F1420" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="apple-mobile-web-app-title" content="GP Dashboard" />
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+
+  <link rel="stylesheet" href="css/variables.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+</head>
+<body>
+
+  <div class="app-shell">
+
+    <!-- ============================== SIDEBAR ============================== -->
+    <aside class="sidebar">
+      <div class="sidebar__mark">GP</div>
+
+      <nav class="sidebar__nav" aria-label="Primary">
+        <a class="sidebar__link is-active" href="#" aria-current="page" aria-label="Dashboard">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+        </a>
+        <a class="sidebar__link" href="#" aria-label="Tasks">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 11l2 2 4-4"/><rect x="3" y="3" width="18" height="18" rx="2.5"/></svg>
+        </a>
+        <a class="sidebar__link" href="#" aria-label="Chat">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12a8 8 0 1 1-3.2-6.4L21 4l-1 4.4"/></svg>
+        </a>
+        <a class="sidebar__link" href="#" aria-label="Schedule">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>
+        </a>
+      </nav>
+
+      <div class="sidebar__spacer"></div>
+
+      <a class="sidebar__link" href="#" aria-label="Settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V21a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1-1.55 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.55-1H3a2 2 0 1 1 0-4h.09a1.7 1.7 0 0 0 1.55-1 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34H9a1.7 1.7 0 0 0 1-1.55V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.55 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87V9a1.7 1.7 0 0 0 1.55 1H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.55 1z"/></svg>
+      </a>
+    </aside>
+
+    <!-- ============================== TOPBAR ============================== -->
+    <header class="topbar">
+      <div class="topbar__project">
+        <span class="topbar__project-name font-display">Information Systems — Capstone Team</span>
+        <span class="topbar__project-meta">4 members · Sprint 3</span>
+      </div>
+
+      <div class="topbar__actions">
+        <button class="team-switch" type="button">
+          <span class="avatar-stack">
+            <span class="avatar"></span>
+            <span class="avatar"></span>
+            <span class="avatar"></span>
+          </span>
+          <span class="team-switch__label">Switch team</span>
+        </button>
+        <button class="btn-primary" type="button">Log contribution</button>
+      </div>
+    </header>
+
+    <!-- ============================== MAIN ============================== -->
+    <main class="main">
+
+      <!-- Team member cards -->
+      <div class="main__section-heading">
+        <h2>Team</h2>
+        <span class="main__section-sub">Contribution share this sprint</span>
+      </div>
+
+      <section class="member-row" aria-label="Team members">
+        <article class="member-card" data-member-id="priya" style="--member-color: #7C5CFF">
+          <div class="member-card__top">
+            <div class="member-card__avatar"><span class="member-card__presence" style="--presence-color: var(--status-done)"></span></div>
+            <div>
+              <div class="member-card__name">Priya Nair</div>
+              <div class="member-card__role">Backend &amp; data</div>
+            </div>
+          </div>
+          <div class="member-card__stat">
+            <span class="member-card__stat-value">34%</span>
+            <span class="member-card__stat-label">of tracked hours</span>
+          </div>
+          <div class="member-card__bar-track">
+            <div class="member-card__bar-fill" style="width: 34%"></div>
+          </div>
+        </article>
+
+        <article class="member-card" data-member-id="jonah" style="--member-color: #2DD4BF">
+          <div class="member-card__top">
+            <div class="member-card__avatar"><span class="member-card__presence" style="--presence-color: var(--status-done)"></span></div>
+            <div>
+              <div class="member-card__name">Jonah Fischer</div>
+              <div class="member-card__role">Frontend</div>
+            </div>
+          </div>
+          <div class="member-card__stat">
+            <span class="member-card__stat-value">28%</span>
+            <span class="member-card__stat-label">of tracked hours</span>
+          </div>
+          <div class="member-card__bar-track">
+            <div class="member-card__bar-fill" style="width: 28%"></div>
+          </div>
+        </article>
+
+        <article class="member-card" data-member-id="ade" style="--member-color: #F2B155">
+          <div class="member-card__top">
+            <div class="member-card__avatar"><span class="member-card__presence" style="--presence-color: var(--status-doing)"></span></div>
+            <div>
+              <div class="member-card__name">Ade Okafor</div>
+              <div class="member-card__role">Research &amp; writing</div>
+            </div>
+          </div>
+          <div class="member-card__stat">
+            <span class="member-card__stat-value">23%</span>
+            <span class="member-card__stat-label">of tracked hours</span>
+          </div>
+          <div class="member-card__bar-track">
+            <div class="member-card__bar-fill" style="width: 23%"></div>
+          </div>
+        </article>
+
+        <article class="member-card" data-member-id="sam" style="--member-color: #E86FA0">
+          <div class="member-card__top">
+            <div class="member-card__avatar"><span class="member-card__presence" style="--presence-color: var(--status-todo)"></span></div>
+            <div>
+              <div class="member-card__name">Sam Boyd</div>
+              <div class="member-card__role">Design</div>
+            </div>
+          </div>
+          <div class="member-card__stat">
+            <span class="member-card__stat-value">15%</span>
+            <span class="member-card__stat-label">of tracked hours</span>
+          </div>
+          <div class="member-card__bar-track">
+            <div class="member-card__bar-fill" style="width: 15%"></div>
+          </div>
+        </article>
+      </section>
+
+      <!-- Workload chart + scheduler -->
+      <section class="chart-panel" aria-label="Workload distribution">
+        <div class="chart-panel__header">
+          <div>
+            <h3 class="chart-panel__title">Workload distribution</h3>
+            <p class="chart-panel__sub" id="workload-chart-sub">Calculated from mock task hours</p>
+          </div>
+          <button class="chart-panel__refresh" type="button" id="simulate-update-btn">
+            Simulate update
+          </button>
+        </div>
+
+        <div class="chart-panel__body">
+          <!-- Populated by js/charts.js: renderDonutChart() builds the <svg> here
+               and animates stroke-dasharray/stroke-dashoffset on first paint
+               and on every subsequent data update. -->
+          <div class="chart-panel__svg-wrap" id="workload-chart" aria-live="polite"></div>
+
+          <!-- Populated by js/charts.js: renderLegend() -->
+          <div class="chart-panel__legend" id="workload-legend"></div>
+        </div>
+      </section>
+
+      <section class="scheduler-panel" aria-label="Meeting scheduler">
+        <h3 class="scheduler-panel__title">Overlapping availability</h3>
+        <p class="main__section-sub" id="scheduler-sub" aria-live="polite">Calculating…</p>
+
+        <div class="scheduler-panel__controls">
+          <label class="scheduler-panel__label" for="scheduler-duration">Meeting length</label>
+          <select class="scheduler-panel__select" id="scheduler-duration">
+            <option value="1">1 hour</option>
+            <option value="2" selected>2 hours</option>
+            <option value="3">3 hours</option>
+          </select>
+        </div>
+
+        <!-- Populated by js/scheduler.js -->
+        <div class="scheduler-grid" id="scheduler-grid" role="grid" aria-label="Weekly availability, hours when team members are free"></div>
+
+        <div class="scheduler-legend" aria-hidden="true">
+          <span class="scheduler-legend__item"><span class="scheduler-legend__swatch scheduler-legend__swatch--none"></span>Nobody</span>
+          <span class="scheduler-legend__item"><span class="scheduler-legend__swatch scheduler-legend__swatch--some"></span>Some free</span>
+          <span class="scheduler-legend__item"><span class="scheduler-legend__swatch scheduler-legend__swatch--best"></span>Suggested</span>
+        </div>
+
+        <div class="scheduler-results" id="scheduler-results"></div>
+      </section>
+
+      <!-- Task board -->
+      <div class="main__section-heading">
+        <h2>Tasks</h2>
+        <span class="main__section-sub">Filtered by status</span>
+      </div>
+
+      <div class="task-filter-tabs" role="tablist" aria-label="Filter tasks by status">
+        <button class="filter-tab is-active" type="button" role="tab" aria-selected="true" data-filter="todo">
+          <span class="filter-tab__dot" style="--tab-color: var(--status-todo)"></span>
+          To do
+          <span class="filter-tab__count">3</span>
+        </button>
+        <button class="filter-tab" type="button" role="tab" aria-selected="false" data-filter="doing">
+          <span class="filter-tab__dot" style="--tab-color: var(--status-doing)"></span>
+          Doing
+          <span class="filter-tab__count">2</span>
+        </button>
+        <button class="filter-tab" type="button" role="tab" aria-selected="false" data-filter="done">
+          <span class="filter-tab__dot" style="--tab-color: var(--status-done)"></span>
+          Done
+          <span class="filter-tab__count">2</span>
+        </button>
+      </div>
+
+      <section class="task-board" aria-label="Task board">
+        <div class="task-column" data-status="todo">
+          <div class="task-column__header">
+            <span class="task-column__title">To do</span>
+            <span class="task-column__count">3</span>
+          </div>
+          <div class="task-card">
+            <span class="task-card__title">Draft literature review outline</span>
+            <div class="task-card__meta"><span>Ade Okafor</span><span>Fri</span></div>
+          </div>
+          <div class="task-card">
+            <span class="task-card__title">Set up staging database</span>
+            <div class="task-card__meta"><span>Priya Nair</span><span>Mon</span></div>
+          </div>
+          <div class="task-card">
+            <span class="task-card__title">Wireframe settings screen</span>
+            <div class="task-card__meta"><span>Sam Boyd</span><span>Mon</span></div>
+          </div>
+        </div>
+
+        <div class="task-column" data-status="doing">
+          <div class="task-column__header">
+            <span class="task-column__title">Doing</span>
+            <span class="task-column__count">2</span>
+          </div>
+          <div class="task-card">
+            <span class="task-card__title">Build contribution API endpoint</span>
+            <div class="task-card__meta"><span>Priya Nair</span><span>Today</span></div>
+          </div>
+          <div class="task-card">
+            <span class="task-card__title">Component styling pass</span>
+            <div class="task-card__meta"><span>Jonah Fischer</span><span>Today</span></div>
+          </div>
+        </div>
+
+        <div class="task-column" data-status="done">
+          <div class="task-column__header">
+            <span class="task-column__title">Done</span>
+            <span class="task-column__count">2</span>
+          </div>
+          <div class="task-card">
+            <span class="task-card__title">Finalize survey questions</span>
+            <div class="task-card__meta"><span>Ade Okafor</span><span>Wed</span></div>
+          </div>
+          <div class="task-card">
+            <span class="task-card__title">Approve color palette</span>
+            <div class="task-card__meta"><span>Sam Boyd</span><span>Tue</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Chat -->
+      <section class="chat-panel" aria-label="Team chat">
+        <div class="chat-panel__header">
+          <h3 class="chart-panel__title">Team chat</h3>
+          <div class="chat-panel__controls">
+            <span class="chat-panel__status" id="chat-status" data-state="connecting"><span class="status-dot"></span><span id="chat-status-label">Connecting…</span></span>
+            <button class="chart-panel__refresh" type="button" id="chat-network-toggle" aria-pressed="false">Simulate offline</button>
+          </div>
+        </div>
+        <div class="chat-panel__thread" id="chat-thread" role="log" aria-live="polite" aria-label="Team chat messages"></div>
+        <div class="chat-panel__typing" id="chat-typing" aria-live="polite"></div>
+        <form class="chat-panel__input-row" id="chat-form" autocomplete="off">
+          <input class="chat-panel__input" id="chat-input" type="text" placeholder="Message the team…" aria-label="Message the team" maxlength="500" />
+          <button class="btn-primary" type="submit" id="chat-send">Send</button>
+        </form>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="js/charts.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/chat.js"></script>
+  <script src="js/scheduler.js"></script>
+</body>
+</html>

@@ -1,0 +1,959 @@
+/* ==========================================================================
+   layout.css
+   Dashboard shell (sidebar + topbar + main grid) and component structure.
+   Interactive states (chart updates, task filtering) are driven by
+   js/charts.js, js/app.js, and js/ui.js.
+   ========================================================================== */
+
+/* ---------------------------------------------------------------------- */
+/* App shell                                                              */
+/* ---------------------------------------------------------------------- */
+
+.app-shell {
+  display: grid;
+  grid-template-columns: var(--sidebar-width) 1fr;
+  grid-template-rows: 72px 1fr;
+  grid-template-areas:
+    "sidebar topbar"
+    "sidebar main";
+  min-height: 100vh;
+  background: var(--bg-void);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Sidebar                                                                */
+/* ---------------------------------------------------------------------- */
+
+.sidebar {
+  grid-area: sidebar;
+  background: var(--bg-surface-sunken);
+  border-right: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-5) 0;
+  gap: var(--space-6);
+}
+
+.sidebar__mark {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: var(--fs-sm);
+  color: var(--text-on-accent);
+}
+
+.sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  width: 100%;
+  align-items: center;
+}
+
+.sidebar__link {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: background var(--duration-fast) var(--ease-standard),
+              color var(--duration-fast) var(--ease-standard);
+}
+
+.sidebar__link svg {
+  width: 20px;
+  height: 20px;
+}
+
+.sidebar__link:hover {
+  background: var(--bg-surface-raised);
+  color: var(--text-primary);
+}
+
+.sidebar__link.is-active {
+  background: var(--accent-primary-glow);
+  color: var(--accent-primary);
+}
+
+.sidebar__spacer {
+  flex: 1;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Topbar                                                                 */
+/* ---------------------------------------------------------------------- */
+
+.topbar {
+  grid-area: topbar;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: 0 var(--space-6);
+  border-bottom: 1px solid var(--border-subtle);
+  background: var(--bg-void);
+  overflow: hidden;
+}
+
+.topbar__project {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.topbar__project-name {
+  font-size: var(--fs-md);
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.topbar__project-meta {
+  font-family: var(--font-body);
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.topbar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.team-switch {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-sm);
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.avatar-stack {
+  display: flex;
+}
+
+.avatar-stack .avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid var(--bg-surface);
+  margin-left: -8px;
+  background: var(--bg-surface-raised);
+}
+
+.avatar-stack .avatar:first-child {
+  margin-left: 0;
+}
+
+.btn-primary {
+  background: var(--accent-primary);
+  color: var(--text-on-accent);
+  border: none;
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: var(--fs-sm);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-standard),
+              transform var(--duration-fast) var(--ease-standard);
+}
+
+.btn-primary:hover {
+  background: var(--accent-primary-dim);
+}
+
+.btn-primary:active {
+  transform: translateY(1px);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Main content grid                                                      */
+/* ---------------------------------------------------------------------- */
+
+.main {
+  grid-area: main;
+  padding: var(--space-6);
+  display: grid;
+  gap: var(--space-6);
+  max-width: var(--content-max-width);
+  grid-template-columns: repeat(12, 1fr);
+  align-content: start;
+}
+
+.main__section-heading {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-top: var(--space-2);
+}
+
+.main__section-heading h2 {
+  font-size: var(--fs-xl);
+}
+
+.main__section-sub {
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  font-family: var(--font-body);
+}
+
+/* ---- Team member cards row ---- */
+/* Small radius, left accent bar — distinguishes "person" cards at a glance */
+
+.member-row {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--space-4);
+}
+
+.member-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-left: 3px solid var(--member-color, var(--accent-primary));
+  border-radius: var(--radius-sm);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.member-card__top {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.member-card__avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--bg-surface-raised);
+  flex-shrink: 0;
+  position: relative;
+}
+
+.member-card__presence {
+  position: absolute;
+  bottom: -1px;
+  right: -1px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  border: 2px solid var(--bg-surface);
+  background: var(--presence-color, var(--status-todo));
+}
+
+.member-card__name {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--fs-base);
+}
+
+.member-card__role {
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+}
+
+.member-card__stat {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.member-card__stat-value {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: 700;
+  color: var(--member-color, var(--accent-primary));
+}
+
+.member-card__stat-label {
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+}
+
+.member-card__bar-track {
+  height: 6px;
+  background: var(--bg-surface-sunken);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+
+.member-card__bar-fill {
+  height: 100%;
+  background: var(--member-color, var(--accent-primary));
+  border-radius: var(--radius-pill);
+  transition: width 700ms var(--ease-standard);
+}
+
+/* ---- Hero: SVG workload chart panel ---- */
+/* Larger radius, glass-like border — the visual centerpiece of the page */
+
+.chart-panel {
+  grid-column: 1 / span 7;
+  background:
+    radial-gradient(120% 140% at 100% 0%, rgba(124, 92, 255, 0.10), transparent 55%),
+    var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-panel);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.chart-panel__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.chart-panel__refresh {
+  flex-shrink: 0;
+  background: transparent;
+  border: 1px solid var(--border-default);
+  color: var(--accent-secondary);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: var(--fs-sm);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-standard),
+              border-color var(--duration-fast) var(--ease-standard);
+}
+
+.chart-panel__refresh:hover {
+  background: var(--bg-surface-raised);
+  border-color: var(--accent-secondary);
+}
+
+.chart-panel__refresh:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.chart-panel__title {
+  font-size: var(--fs-lg);
+}
+
+.chart-panel__sub {
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  margin-top: var(--space-1);
+}
+
+.chart-panel__body {
+  display: flex;
+  align-items: center;
+  gap: var(--space-7);
+  flex-wrap: wrap;
+}
+
+.chart-panel__svg-wrap {
+  width: 220px;
+  height: 220px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-surface-sunken);
+  border-radius: 50%;
+}
+
+.donut-chart {
+  overflow: visible;
+}
+
+.pie-segment {
+  transition: stroke-dasharray 700ms var(--ease-standard),
+              stroke-dashoffset 700ms var(--ease-standard);
+}
+
+.chart-panel__legend {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  flex: 1;
+  min-width: 180px;
+}
+
+.legend-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--fs-sm);
+}
+
+.legend-row__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--legend-color, var(--accent-primary));
+  flex-shrink: 0;
+}
+
+.legend-row__label {
+  flex: 1;
+  color: var(--text-secondary);
+}
+
+.legend-row__value {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* ---- Meeting scheduler panel ---- */
+
+.scheduler-panel {
+  grid-column: span 5;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.scheduler-panel__title {
+  font-size: var(--fs-lg);
+}
+
+.scheduler-panel__controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.scheduler-panel__label {
+  font-size: var(--fs-sm);
+  color: var(--text-secondary);
+}
+
+.scheduler-panel__select {
+  background: var(--bg-surface-sunken);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: var(--fs-sm);
+  padding: var(--space-2) var(--space-3);
+}
+
+/* Weekly grid: time label column + 5 day columns. Rows use display:contents
+   so the ARIA row roles don't disturb the CSS grid. */
+.scheduler-grid {
+  display: grid;
+  grid-template-columns: 44px repeat(5, 1fr);
+  gap: 4px;
+  align-items: center;
+}
+
+.scheduler-grid__row { display: contents; }
+
+.scheduler-grid__day,
+.scheduler-grid__time {
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+}
+
+.scheduler-grid__day {
+  text-align: center;
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+
+/* Heat: --heat is (members free / team size), set per cell by scheduler.js */
+.scheduler-grid__cell {
+  height: 26px;
+  position: relative;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--accent-secondary) calc(var(--heat, 0) * 40%), var(--bg-surface-sunken));
+  transition: background var(--duration-fast) var(--ease-standard);
+}
+
+/* Cells inside a suggested window */
+.scheduler-grid__cell.has-overlap {
+  background: var(--accent-secondary);
+}
+
+/* The window currently chosen in the list below */
+.scheduler-grid__cell.is-selected {
+  z-index: 1;
+  box-shadow: 0 0 0 2px var(--accent-primary), 0 0 12px var(--accent-primary-glow);
+}
+
+.scheduler-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+}
+
+.scheduler-legend__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.scheduler-legend__swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: var(--radius-sm);
+}
+
+.scheduler-legend__swatch--none { background: var(--bg-surface-sunken); border: 1px solid var(--border-default); }
+.scheduler-legend__swatch--some { background: color-mix(in srgb, var(--accent-secondary) 25%, var(--bg-surface-sunken)); }
+.scheduler-legend__swatch--best { background: var(--accent-secondary); }
+
+/* Suggested windows list */
+.scheduler-results {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.scheduler-results__empty {
+  margin: 0;
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+}
+
+.slot-option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  width: 100%;
+  text-align: left;
+  background: var(--bg-surface-sunken);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  border-left: 3px solid var(--accent-secondary);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-standard),
+              border-color var(--duration-fast) var(--ease-standard);
+}
+
+.slot-option:hover { background: var(--bg-surface-raised); }
+
+.slot-option[aria-pressed="true"] {
+  background: var(--bg-surface-raised);
+  border-color: var(--accent-primary);
+  border-left-color: var(--accent-primary);
+}
+
+.slot-option__day {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--fs-sm);
+  min-width: 2.5em;
+}
+
+.slot-option__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.slot-option__time { font-size: var(--fs-sm); font-weight: 700; }
+.slot-option__meta { font-size: var(--fs-xs); color: var(--text-muted); }
+.slot-option__len { font-size: var(--fs-xs); color: var(--text-secondary); white-space: nowrap; }
+
+/* ---- Task filter tabs ---- */
+/* Static layout only in this phase — wiring to actual list filtering
+   happens once app.js exists. Dot color always matches the column's
+   status token so tabs and board stay visually in sync. */
+
+.task-filter-tabs {
+  grid-column: 1 / -1;
+  display: inline-flex;
+  gap: var(--space-1);
+  background: var(--bg-surface-sunken);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-pill);
+  padding: 4px;
+  width: fit-content;
+}
+
+.filter-tab {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-standard),
+              color var(--duration-fast) var(--ease-standard);
+}
+
+.filter-tab__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--tab-color, var(--accent-primary));
+  flex-shrink: 0;
+}
+
+.filter-tab__count {
+  font-family: var(--font-display);
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+}
+
+.filter-tab.is-active {
+  background: var(--bg-surface-raised);
+  color: var(--text-primary);
+}
+
+.filter-tab.is-active .filter-tab__count {
+  color: var(--text-primary);
+}
+
+.filter-tab:hover:not(.is-active) {
+  color: var(--text-secondary);
+}
+
+.filter-tab:hover:not(.is-active) .filter-tab__dot {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--tab-color, var(--accent-primary)) 25%, transparent);
+}
+
+/* ---- Task board ---- */
+/* Sharp corners, top accent line — distinguishes "work item" cards from
+   member cards so the two content types never read as the same shape. */
+
+.task-board {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-5);
+}
+
+.task-column {
+  background: var(--bg-surface-sunken);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-height: 320px;
+  transition: opacity 260ms var(--ease-standard),
+              transform 260ms var(--ease-standard);
+}
+
+/* Driven by js/ui.js. Exactly one column is visible per active filter tab:
+   the matching column expands to fill the row and fades/slides in. The
+   outgoing column is hidden immediately (no exit animation) rather than
+   fading out in place — with CSS Grid, animating an exit and an expanding
+   entrance at the same time causes both to briefly compete for grid
+   placement, leaving a blank gap. Animating only the entrance avoids that
+   entirely and still reads as a smooth filter. */
+.task-column.is-active-filter {
+  grid-column: 1 / -1;
+}
+
+.task-column.is-entering {
+  opacity: 0;
+  transform: translateY(6px);
+}
+
+.task-column.is-hidden {
+  display: none;
+}
+
+.task-column__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.task-column__title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--fs-sm);
+  color: var(--text-secondary);
+}
+
+.task-column__count {
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+  background: var(--bg-surface-raised);
+  border-radius: var(--radius-pill);
+  padding: 2px var(--space-2);
+}
+
+.task-column[data-status="todo"] { --status-color: var(--status-todo); }
+.task-column[data-status="doing"] { --status-color: var(--status-doing); }
+.task-column[data-status="done"] { --status-color: var(--status-done); }
+
+.task-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-top: 2px solid var(--status-color, var(--border-strong));
+  border-radius: var(--radius-sharp);
+  padding: var(--space-3) var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.task-card__title {
+  font-size: var(--fs-sm);
+  color: var(--text-primary);
+  font-weight: 400;
+}
+
+.task-card__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+}
+
+/* ---- Chat panel ---- */
+
+.chat-panel {
+  grid-column: 1 / -1;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.chat-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.chat-panel__status {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--status-done);
+}
+
+.chat-panel__controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.chat-panel__status[data-state="connecting"] .status-dot,
+.chat-panel__status[data-state="reconnecting"] .status-dot { background: var(--status-doing); }
+.chat-panel__status[data-state="offline"] .status-dot { background: var(--status-danger); }
+
+/* Scrolling message list. The :empty rule shows the placeholder until the
+   first message arrives. */
+.chat-panel__thread {
+  min-height: 200px;
+  max-height: 360px;
+  overflow-y: auto;
+  border-radius: var(--radius-md);
+  background: var(--bg-surface-sunken);
+  border: 1px solid var(--border-subtle);
+  padding: var(--space-4);
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.chat-panel__thread:empty::before {
+  content: "No messages yet. Say hello to the team.";
+  margin: auto;
+  text-align: center;
+}
+
+.chat-panel__typing {
+  min-height: 1.25em;
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+}
+
+/* Teammates: raised surface, author name in their member color.
+   You: purple-tinted surface, right-aligned. */
+.chat-msg {
+  align-self: flex-start;
+  max-width: min(72%, 520px);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-2) var(--space-4);
+  background: var(--bg-surface-raised);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  animation: chat-in var(--duration-normal) var(--ease-standard);
+}
+
+.chat-msg--mine {
+  align-self: flex-end;
+  background: color-mix(in srgb, var(--accent-primary) 22%, var(--bg-surface-raised));
+  border-color: var(--accent-primary-dim);
+}
+
+.chat-msg__meta {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+}
+
+.chat-msg__author {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--author-color, color-mix(in srgb, var(--accent-primary) 65%, white));
+}
+
+.chat-msg__text {
+  margin: 0;
+  font-size: var(--fs-sm);
+  color: var(--text-primary);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.chat-msg__state {
+  align-self: flex-end;
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+}
+
+.chat-msg__state:empty { display: none; }
+.chat-msg[data-state="queued"] .chat-msg__state { color: var(--status-doing); }
+
+@keyframes chat-in {
+  from { opacity: 0; transform: translateY(4px); }
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.chat-panel__input-row {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.chat-panel__input {
+  flex: 1;
+  background: var(--bg-surface-sunken);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3) var(--space-4);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: var(--fs-sm);
+}
+
+.chat-panel__input::placeholder {
+  color: var(--text-muted);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Responsive                                                             */
+/* ---------------------------------------------------------------------- */
+
+@media (max-width: 1024px) {
+  .chart-panel { grid-column: 1 / -1; }
+  .scheduler-panel { grid-column: 1 / -1; }
+  .task-board { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 768px) {
+  .app-shell {
+    grid-template-columns: 64px 1fr;
+  }
+
+  .task-board { grid-template-columns: 1fr; }
+
+  .chart-panel__body { flex-direction: column; align-items: stretch; }
+
+  .topbar__project-meta { display: none; }
+  .team-switch__label { display: none; }
+  .team-switch { padding: var(--space-2); }
+}
+
+@media (max-width: 560px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+    grid-template-rows: 64px auto 1fr;
+    grid-template-areas:
+      "topbar"
+      "sidebar"
+      "main";
+  }
+
+  .sidebar {
+    flex-direction: row;
+    padding: var(--space-3);
+    border-right: none;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .sidebar__nav { flex-direction: row; }
+  .sidebar__spacer { display: none; }
+
+  .main { padding: var(--space-4); }
+
+  .topbar { padding: 0 var(--space-4); }
+  .chat-msg { max-width: 88%; }
+  .chat-panel { padding: var(--space-4); }
+  .chat-panel__controls { gap: var(--space-2); }
+  .topbar__project-name { font-size: var(--fs-sm); }
+  .btn-primary { padding: var(--space-2) var(--space-3); font-size: var(--fs-xs); }
+}
